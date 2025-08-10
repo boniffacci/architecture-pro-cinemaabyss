@@ -5,7 +5,7 @@
 1. Спроектируйте to be архитектуру КиноБездны, разделив всю систему на отдельные домены и организовав интеграционное взаимодействие и единую точку вызова сервисов.
 Результат представьте в виде контейнерной диаграммы в нотации С4.
 Добавьте ссылку на файл в этот шаблон
-[ссылка на файл](ссылка)
+[ссылка на файл](https://www.plantuml.com/plantuml/png/dLPTJnD157tVNx7oOac0llZa4_AXCM9IgVXAjkq06zhTPdSA4cF2Xn0C95KUZT6WCRwso4BvwFeNPlwHPswdKpPhePIapCwTUyyzzyoTsPqCkHFmMgLiFN2zOhbMOlOAvzNmSJOREEiJoovVgHLg8GkAliUPnoUAVYLRBJkUYXaFUQdi5hBJZyPpohJmSYvRSKBE0fWMfn7Xk1uB9geAttfeYsEvBLhYIhHiSIrYSIRQ8bQFaMZBkjoMXxRuApUnZAK8VWquj4JBid8i27qleuYCsICB6EmPjkOMMJY2kVWAiAP2beT0EX3Hc2rEWD34-4CS4IebZWaOeB8-CchbDy2riZZxbcS2Xi8gp2ivtFKzOCud37QU1IeTPJi2G2JtYNFT1d8aBe5CPOXJqK2HKOSAdk6mXNHRoWYN1j9syqxvDS076vaYLAeu1JrLARw0BRGHdn5q3ios2hJVMJR-ZAwPPOUpTKS5FEiysKzopnL537RNH6A3oARSns-7Tk0SypqIGLKwct-j0g5LWzPHXlAI7-1vQJn7aybfBxGgUaiI8XsB2CgSgD8XluX9a7EC9rs1yBiWrv-qFGsim4Ox7lK9aNMKqa99zwDQTJQmaxp7DjSnt4RuIkSyCpI_YIRHR8eOAyYMSYDYYlWf_WC7JvSfCcjkYVazAc_Kj3yH342BHDnVAUEYjpe2eGOiE3nq6A1OYiIIi-O7BcTXZyZJhga_6JIErg1DtVcdFwsaCz4WUh7S8nV8zrzYgyxIgWFC5sgqfyirTPje9ZTEaKq7dauS9gGq3F9Zzt0hR8hwf4uVyk-2IQoPH1G0zmF0TVeboMAceBeRWxbhfXHOpW_vSi3oh-O8-fSkpbHi99UxjxNyQ2gPxa_aCwqvHCfKqwOJKUzH6cgxOPBq6Z8DRxgAKfY66YPDgjKeuNjwYnnXhG6FQpffg9JwGlLetRBcMLc_9ipjQ6uui9S7j2CO0QTyZLVYFXiiHE_RFQDe4-uPOvIzEyueO5nDBulVq4dhdIKHwPgIXpfTiXvJtq2noQfeDb1SkZ9ZkJEU0FIDaS8P-F2d1ID81V1TxeYckBhvSac4YukqSaCYa693nYTx9VKfqxTJ9k6aFit-0G00)
 
 
 ## Задание 2
@@ -58,7 +58,9 @@
 
 Необходимые тесты для проверки этого API вызываются при запуске npm run test:local из папки tests/postman 
 Приложите скриншот тестов и скриншот состояния топиков Kafka http://localhost:8090 
-
+[Скриншот тестов](./screenshots/2(1).png)
+[Состояния топиков](./screenshots/2(2).png)
+[Состояния топиков](./screenshots/2(3).png)
 
 ## Задание 3
 
@@ -275,6 +277,9 @@ cat .docker/config.json | base64
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
 
 
+[Скриншот вывода](./screenshots/3(1).png)
+[Скриншот вывода event-service](./screenshots/3(2).png)
+
 ## Задание 4
 Для простоты дальнейшего обновления и развертывания вам как архитектуру необходимо так же реализовать helm-чарты для прокси-сервиса и проверить работу 
 
@@ -349,6 +354,9 @@ minikube tunnel
 https://cinemaabyss.example.com/api/movies
 и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
 
+[Скриншот helm](./screenshots/4(1).png)
+[Скриншот helm](./screenshots/4(2).png)
+[Скриншот https://cinemaabyss.example.com/api/movies](./screenshots/4(3).png)
 
 # Задание 5
 Компания планирует активно развиваться и для повышения надежности, безопасности, реализации сетевых паттернов типа Circuit Breaker и канареечного деплоя вам как архитектору необходимо развернуть istio и настроить circuit breaker для monolith и movies сервисов.
@@ -414,6 +422,8 @@ You can see 21 for the upstream_rq_pending_overflow value which means 21 calls s
 ```
 
 Приложите скриншот работы circuit breaker'а
+
+[Скриншот работы circuit breaker'а](./screenshots/5.png)
 
 Удаляем все
 ```bash

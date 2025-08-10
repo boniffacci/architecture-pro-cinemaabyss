@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: events-service
+  name: event-service
   namespace: {{ .Values.global.namespace }}
   labels:
-    app: events-service
+    app: event-service
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.eventsService.replicas }}
   selector:
     matchLabels:
-      app: events-service
+      app: event-service
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -21,21 +21,58 @@ spec:
   template:
     metadata:
       labels:
-        app: events-service
+        app: event-service
     spec:
       containers:
-      - name: events-service
-       .... тут
+        - name: event-service
+          image: {{ .Values.eventsService.image.repository }}:{{ .Values.eventsService.image.tag }}
+          imagePullPolicy: {{ .Values.eventsService.image.pullPolicy }}
+          ports:
+            - containerPort: 8082
+          env:
+            - name: PORT
+              value: "8082"
+            - name: KAFKA_BROKER
+              value: "kafka:9092"
+          resources:
+            limits:
+              cpu: {{ .Values.eventsService.resources.limits.cpu }}
+              memory: {{ .Values.eventsService.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.eventsService.resources.requests.cpu }}
+              memory: {{ .Values.eventsService.resources.requests.memory }}
+          readinessProbe:
+            httpGet:
+              path: /api/events/health
+              port: 8082
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/events/health
+              port: 8082
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: dockerconfigjson
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: events-service
+  name: event-service
   namespace: {{ .Values.global.namespace }}
   labels:
-    app: events-service
+    app: event-service
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
- ........ и тут
+  selector:
+    app: event-service
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+  type: ClusterIP
 {{- end }}
