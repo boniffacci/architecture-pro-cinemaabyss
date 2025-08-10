@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/api/movies", moviesHandler)
 	http.HandleFunc("/api/events", proxyHandler(getEnv("EVENTS_SERVICE_URL", "http://events-service:8082")))
 	http.HandleFunc("/", proxyHandler(getEnv("MONOLITH_URL", "http://monolith:8080")))
-
+	http.HandleFunc("/api/events/health", healthHandler)
 	log.Printf("Proxy service running on port %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

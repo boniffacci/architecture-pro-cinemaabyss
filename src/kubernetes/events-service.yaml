@@ -35,13 +35,13 @@ spec:
               memory: "128Mi"
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /api/events/health
               port: 8082
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /api/events/health
               port: 8082
             initialDelaySeconds: 15
             periodSeconds: 20
