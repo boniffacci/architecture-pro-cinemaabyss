@@ -3,16 +3,16 @@ global:
   namespace: cinemaabyss
   domain: cinemaabyss.example.com
 
-# Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6ICJZbTl1YVdabVlXTmphVHBuYUhCZlVtZzFSVFpYZVdOQlQwbFVWbmhaVVRWM1RUaGlTbFJOTjBkSlVXeEhORWhUU0VoQiIKCQl9LAoJCSJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7fQoJfSwKCSJjcmVkc1N0b3JlIjogImRlc2t0b3AiLAoJImN1cnJlbnRDb250ZXh0IjogImRlc2t0b3AtbGludXgiCn0=
+
 # Database configuration
 database:
   host: postgres
   port: 5432
   name: cinemaabyss
   user: postgres
-  password: cG9zdGdyZXNfcGFzc3dvcmQ=
+  password: cG9zdGdyZXNfcGFzc3dvcmQ=  # base64 от пароля
   image:
     repository: postgres
     tag: 14
@@ -33,7 +33,7 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
+    repository: ghcr.io/boniffacci/architecture-pro-cinemaabyss/monolith
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -48,12 +48,15 @@ monolith:
     port: 8080
     targetPort: 8080
     type: ClusterIP
+  # Для деплоя в шаблоне Deployment
+  imagePullSecrets:
+    - name: dockerconfigjson
 
 # Proxy service configuration
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
+    repository: ghcr.io/boniffacci/architecture-pro-cinemaabyss/proxy-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -68,12 +71,14 @@ proxyService:
     port: 80
     targetPort: 8000
     type: ClusterIP
+  imagePullSecrets:
+    - name: dockerconfigjson
 
 # Movies service configuration
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
+    repository: ghcr.io/boniffacci/architecture-pro-cinemaabyss/movies-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -88,12 +93,14 @@ moviesService:
     port: 8081
     targetPort: 8081
     type: ClusterIP
+  imagePullSecrets:
+    - name: dockerconfigjson
 
 # Events service configuration
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
+    repository: ghcr.io/boniffacci/architecture-pro-cinemaabyss/events-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -108,6 +115,8 @@ eventsService:
     port: 8082
     targetPort: 8082
     type: ClusterIP
+  imagePullSecrets:
+    - name: dockerconfigjson
 
 # Kafka configuration
 kafka:
@@ -172,14 +181,21 @@ ingress:
         - path: /
           pathType: Prefix
           service: proxy-service
-          port: 80
+          port: 8000
         - path: /api/events
           pathType: Prefix
-          service: events-service
+          service: event-service
           port: 8082
+        - path: /api/movies
+          pathType: Prefix
+          service: movies-service
+          port: 8081
+        - path: /api/users  
+          pathType: Prefix
+          service: proxy-service
+          port: 8000
 
-# Application configuration
+# Application config
 config:
-  # Strangler Fig configuration
   gradualMigration: "true"
   moviesMigrationPercent: "100"
